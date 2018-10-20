@@ -194,6 +194,7 @@ update_status ModulePhysics::PostUpdate()
 	if(!debug)
 		return UPDATE_CONTINUE;
 
+	
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
@@ -266,14 +267,14 @@ update_status ModulePhysics::PostUpdate()
 
 			
 			PhysBody* bodyAux = (PhysBody*)f->GetBody()->GetUserData();
+			
 			// TODO 1: If mouse button 1 is pressed ...
 			// test if the current body contains mouse position
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN 
-				&& bodyToJoint == nullptr
 				&& bodyAux !=nullptr
 				&& bodyAux->Contains(App->input->GetMouseX(), App->input->GetMouseY()) )
 			{
-				bodyToJoint = bodyAux;
+				jointBody = bodyAux->body;
 				break;
 			}
 		}
