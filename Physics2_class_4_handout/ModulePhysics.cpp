@@ -301,7 +301,7 @@ update_status ModulePhysics::PostUpdate()
 	// TODO 3: If the player keeps pressing the mouse button, update
 	// target position and draw a red line between both anchor points
 
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && body_clicked != nullptr)
 		{
 			//The mouse Joint previously created (def) is in the world JointList
 			for (b2MouseJoint* b_mouse_joint = (b2MouseJoint*)world->GetJointList(); b_mouse_joint; b_mouse_joint = (b2MouseJoint*)b_mouse_joint->GetNext())
@@ -329,6 +329,7 @@ update_status ModulePhysics::PostUpdate()
 			{
 				world->DestroyJoint(b_mouse_joint);
 				b_mouse_joint = nullptr;
+				body_clicked = nullptr;
 				break;
 
 				//for (b2MouseJoint* b_mouse_joint = (b2MouseJoint*)world->GetJointList(); 
