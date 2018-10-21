@@ -285,31 +285,40 @@ update_status ModulePhysics::PostUpdate()
 	// TODO 2: If a body was selected, create a mouse joint
 	// using mouse_joint class property
 
-	if (body_clicked != nullptr)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN
+		&& body_clicked != nullptr)
 	{
+		//mouse_ghost_body = {};
 		b2MouseJointDef def;
 		def.bodyA = ground;
 		def.bodyB = body_clicked;
-		def.target = { (float32)App->input->GetMouseX(), (float32)App->input->GetMouseY() };
+		def.target = { PIXEL_TO_METERS((float32)App->input->GetMouseX()), PIXEL_TO_METERS((float32)App->input->GetMouseY()) };
 		def.dampingRatio = 0.5f;
 		def.frequencyHz = 2.0f;
 		def.maxForce = 100.0f * body_clicked->GetMass();
 		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
-
+	}
 
 	// TODO 3: If the player keeps pressing the mouse button, update
 	// target position and draw a red line between both anchor points
 
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		{
-			def.target = { (float32)App->input->GetMouseX(), (float32)App->input->GetMouseY() };
-			App->renderer->DrawLine(METERS_TO_PIXELS(def.bodyB->GetPosition().x), METERS_TO_PIXELS(def.bodyB->GetPosition().y),
-									//def.bodyA->GetLocalPoint(), def.bodyA->GetLocalPoint.y,
-									def.target.x, def.target.y,
-									255,0,0,255);
+			for (b2MouseJoint* b_mouse_joint = (b2MouseJoint*)world->GetJointList(); b_mouse_joint; b_mouse_joint = (b2MouseJoint*)b_mouse_joint->GetNext())
+			{
+
+				b_mouse_joint->SetTarget({ PIXEL_TO_METERS((float32)App->input->GetMouseX()), PIXEL_TO_METERS((float32)App->input->GetMouseY()) });
+
+				//target = { (float32)App->input->GetMouseX(), (float32)App->input->GetMouseY() };
+			//Draw the line between both points
+				App->renderer->DrawLine(METERS_TO_PIXELS(b_mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(b_mouse_joint->GetAnchorB().y),
+					METERS_TO_PIXELS(b_mouse_joint->GetTarget().x), METERS_TO_PIXELS( b_mouse_joint->GetTarget().y),
+					//def.target.x, def.target.y,
+					255, 0, 0, 255);
+			}
 		}
 		
-	}
+	
 
 
 	
